@@ -1,16 +1,19 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Search, User, UserPlus, LayoutGrid, ChevronDown, Menu } from "lucide-react";
+import { Search, User, UserPlus, LayoutGrid, ChevronDown, Menu, LogOut, LayoutDashboard, Wallet } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { categories, navLinks } from "@/data/site";
+import { useAuth } from "@/lib/auth";
 
 export function SiteHeader() {
   const [searchQuery, setSearchQuery] = useState("");
