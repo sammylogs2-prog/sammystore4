@@ -253,6 +253,99 @@ export default function ProductsPage() {
         </div>
       </section>
 
+      {/* Purchase Confirmation Dialog */}
+      {buyTarget && (
+        <Dialog open={!!buyTarget} onOpenChange={(open) => !open && closePurchaseResult()}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>
+                {purchaseOrderId ? "Purchase Successful!" : "Confirm Purchase"}
+              </DialogTitle>
+            </DialogHeader>
+            {!purchaseOrderId ? (
+              <div className="space-y-4 py-4">
+                <div className="p-4 bg-slate-50 rounded-lg">
+                  <div className="text-sm text-muted-foreground">Product</div>
+                  <div className="font-semibold text-lg mt-1">{buyTarget.title}</div>
+                  <div className="text-lg font-bold text-brand-orange mt-2">
+                    ₦{buyTarget.price.toLocaleString()}
+                  </div>
+                </div>
+                {walletBalance !== null && (
+                  <div className="text-sm">
+                    <span className="text-muted-foreground">Balance after: </span>
+                    <span className="font-semibold">
+                      ₦{(walletBalance - buyTarget.price).toLocaleString()}
+                    </span>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="space-y-4 py-4">
+                <div className="flex items-center justify-center w-12 h-12 mx-auto bg-green-100 rounded-full">
+                  <PackageCheck className="w-6 h-6 text-green-600" />
+                </div>
+                <div className="text-center">
+                  <p className="text-sm text-muted-foreground">Order ID: {purchaseOrderId}</p>
+                </div>
+                {deliveredCred && (
+                  <div className="p-3 bg-slate-50 rounded-lg space-y-2">
+                    <p className="text-xs font-semibold text-muted-foreground">
+                      {deliveredCred.label || "Credentials"}
+                    </p>
+                    <div className="font-mono text-xs break-all bg-white p-2 rounded border border-border">
+                      {deliveredCred.content}
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={handleCopy}
+                      className="w-full"
+                    >
+                      {copied ? (
+                        <>
+                          <CheckCheck className="w-4 h-4 mr-1" />
+                          Copied!
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-4 h-4 mr-1" />
+                          Copy Credentials
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                )}
+              </div>
+            )}
+            <DialogFooter>
+              {!purchaseOrderId ? (
+                <>
+                  <Button
+                    variant="outline"
+                    onClick={closePurchaseResult}
+                    disabled={buying}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={handleBuy}
+                    disabled={buying}
+                    className="bg-brand-orange hover:bg-brand-orange-hover text-white"
+                  >
+                    {buying && <Loader2 className="w-4 h-4 mr-1 animate-spin" />}
+                    Confirm Purchase
+                  </Button>
+                </>
+              ) : (
+                <Button onClick={closePurchaseResult} className="w-full">
+                  Close
+                </Button>
+              )}
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
     </>
   );
 }
