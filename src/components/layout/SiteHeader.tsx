@@ -160,7 +160,7 @@ export function SiteHeader() {
                 <Menu className="w-6 h-6" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[280px]">
+            <SheetContent side="right" className="w-[280px] overflow-y-auto">
               <div className="flex flex-col gap-1 mt-10 p-4">
                 {navLinks.map((link) => (
                   <Link
@@ -182,7 +182,7 @@ export function SiteHeader() {
                   {categories.length === 0 ? (
                     <p className="text-sm text-muted-foreground py-2">Loading…</p>
                   ) : (
-                    <div className="max-h-56 overflow-y-auto space-y-1">
+                    <div className="max-h-32 overflow-y-auto space-y-1">
                       {categories.map((c) => (
                         <Link
                           key={c.id}
