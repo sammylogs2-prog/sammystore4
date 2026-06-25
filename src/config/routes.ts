@@ -1,68 +1,28 @@
-import { ReactNode } from 'react';
-import Dashboard from '@/pages/Dashboard';
-import Accounts from '@/pages/Accounts';
-import Numbers from '@/pages/Numbers';
-import AllNumbers from '@/pages/AllNumbers';
-import Pricing from '@/pages/Pricing';
-import FundWallet from '@/pages/FundWallet';
-import ReferEarn from '@/pages/ReferEarn';
-import AccountHistory from '@/pages/AccountHistory';
-import NumbersHistory from '@/pages/NumbersHistory';
-import TransactionHistory from '@/pages/TransactionHistory';
-import ApiTools from '@/pages/ApiTools';
-import ContactUs from '@/pages/ContactUs';
+import { DASHBOARD_ROUTES, DashboardRouteConfig } from '@/features/dashboard/routes';
+import { MARKETPLACE_ROUTES, MarketplaceRouteConfig } from '@/features/marketplace/routes';
+import { ADMIN_ROUTES, AdminRouteConfig } from '@/features/admin/routes';
 
-export type SectionType =
-  | 'dashboard'
-  | 'accounts'
-  | 'numbers'
-  | 'allnumbers'
-  | 'pricing'
-  | 'fund'
-  | 'refer'
-  | 'accounthistory'
-  | 'numbershistory'
-  | 'txhistory'
-  | 'api'
-  | 'contact';
+export type AllRouteConfig = DashboardRouteConfig | MarketplaceRouteConfig | AdminRouteConfig;
 
-export interface RouteConfig {
-  path: string;
-  section: SectionType;
-  component: ReactNode;
-  label: string;
-}
-
-export const ROUTES: RouteConfig[] = [
-  { path: '/', section: 'dashboard', component: Dashboard, label: 'Dashboard' },
-  { path: '/accounts', section: 'accounts', component: Accounts, label: 'Accounts' },
-  { path: '/numbers', section: 'numbers', component: Numbers, label: 'Numbers' },
-  { path: '/allnumbers', section: 'allnumbers', component: AllNumbers, label: 'All Numbers' },
-  { path: '/pricing', section: 'pricing', component: Pricing, label: 'Pricing' },
-  { path: '/fund', section: 'fund', component: FundWallet, label: 'Fund Wallet' },
-  { path: '/refer', section: 'refer', component: ReferEarn, label: 'Refer & Earn' },
-  { path: '/accounthistory', section: 'accounthistory', component: AccountHistory, label: 'Account History' },
-  { path: '/numbershistory', section: 'numbershistory', component: NumbersHistory, label: 'Numbers History' },
-  { path: '/txhistory', section: 'txhistory', component: TransactionHistory, label: 'Transaction History' },
-  { path: '/api', section: 'api', component: ApiTools, label: 'API Tools' },
-  { path: '/contact', section: 'contact', component: ContactUs, label: 'Contact Us' },
+/**
+ * Unified route registry combining all features
+ * - Dashboard: internal user/admin panel (sidebar layout)
+ * - Marketplace: public e-commerce (public header layout)
+ * - Admin: admin-only management panel (full-width layout)
+ */
+export const ALL_ROUTES: AllRouteConfig[] = [
+  ...DASHBOARD_ROUTES,
+  ...MARKETPLACE_ROUTES,
+  ...ADMIN_ROUTES,
 ];
 
-export const getRouteByPath = (path: string): RouteConfig | undefined => {
-  // Exact match first
-  let match = ROUTES.find(r => r.path === path);
-  if (match) return match;
-  
-  // Then try startsWith for nested routes
-  match = ROUTES.find(r => path.startsWith(r.path));
-  return match;
-};
+/**
+ * Get total route count across all features
+ */
+export const getTotalRouteCount = (): number => ALL_ROUTES.length;
 
-export const getRouteBySection = (section: SectionType): RouteConfig | undefined => {
-  return ROUTES.find(r => r.section === section);
-};
-
-export const getSectionFromPath = (path: string): SectionType => {
-  const route = getRouteByPath(path);
-  return route?.section ?? 'dashboard';
-};
+/**
+ * Export feature-specific routes for direct access if needed
+ */
+export { DASHBOARD_ROUTES, MARKETPLACE_ROUTES, ADMIN_ROUTES };
+export { useRouteLayout } from './useRouteLayout';
